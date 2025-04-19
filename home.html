@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulation Dashboard - Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+  <div class="container home">
+    <header>
+      <div class="logo">
+        <h1>Simulation Dashboard</h1>
+        <div class="theme-toggle">
+          <input type="checkbox" id="theme-switch" />
+          <label for="theme-switch" class="switch-label">
+            <span class="toggle"></span>
+          </label>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="home-categories">
+        <div class="home-category" data-category="core">
+          <h2>Core</h2>
+        </div>
+        <div class="home-category" data-category="quantum">
+          <h2>Quantum</h2>
+        </div>
+        <div class="home-category" data-category="astro">
+          <h2>Astro</h2>
+        </div>
+        <div class="home-category" data-category="bio">
+          <h2>Bio</h2>
+        </div>
+      </div>
+    </main>
+    <footer>
+      &copy; 2025 Simulation Dashboard. All rights reserved.
+    </footer>
+  </div>
+  <script>
+    // Theme toggle logic
+    const themeSwitch = document.getElementById('theme-switch');
+    themeSwitch.addEventListener('change', function() {
+      if (this.checked) {
+        document.body.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+    // On load, set theme from localStorage
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-switch').checked = true;
+      }
+    });
+
+    // Home page category navigation
+    document.querySelectorAll('.home-category').forEach(box => {
+      box.addEventListener('click', function() {
+        // Redirect to index.html and pass category as query param
+        window.location.href = "index.html?category=" + this.dataset.category;
+      });
+    });
+  </script>
+</body>
+</html>

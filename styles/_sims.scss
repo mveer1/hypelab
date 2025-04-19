@@ -1,115 +1,131 @@
+.controls-panel {
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
 
-/* Canvas and simulation display */
+.controls-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.controls-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.parameters {
+  margin-bottom: 1.5rem;
+}
+
+.parameter {
+  margin-bottom: 1rem;
+}
+
+.parameter label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.parameter-value {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.parameter input[type=range] {
+  flex: 1;
+  height: 5px;
+  -webkit-appearance: none;
+  background: var(--border-color);
+  border-radius: 5px;
+  outline: none;
+}
+
+.parameter input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+}
+
+.parameter .value {
+  min-width: 50px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 .canvas-wrapper {
-    position: relative;
-    width: 100%;
-    background-color: var(--surface-color);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: 0 2px 8px var(--shadow-color);
-    aspect-ratio: 16 / 9;
+  position: relative;
+  width: 100%;
+  background-color: var(--surface-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  aspect-ratio: 16/9;
 }
 
 #simulation-canvas {
-    width: 100%;
-    height: 100%;
-    background-image: 
-        linear-gradient(var(--grid-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-    background-size: 20px 20px;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-/* Loading indicator */
 #loading-indicator {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(var(--surface-color-rgb), 0.8);
-    z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(30,30,30,0.8);
+  z-index: 10;
 }
 
 .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid rgba(var(--primary-color-rgb), 0.3);
-    border-radius: 50%;
-    border-top-color: var(--primary-color);
-    animation: spin 1s linear infinite;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(58,134,255,0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s linear infinite;
 }
 
-/* Data display section */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .data-display {
-    border-top: 1px solid var(--border-color);
-    padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
 }
 
 #data-tabs {
-    display: flex;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
+  display: flex;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.data-tab {
-    padding: 0.5rem 1rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    color: var(--text-secondary);
-    border-bottom: 2px solid transparent;
-    transition: color var(--transition-speed), border-color var(--transition-speed);
-}
-
-.data-tab:hover {
-    color: var(--primary-color);
-}
-
-.data-tab.active {
-    color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-}
-
-.tab-content {
-    display: none;
-    height: 200px;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-#graphs-container {
-    width: 100%;
-    height: 100%;
-}
-
-#values-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1rem;
-}
-
-.value-card {
-    background-color: var(--background-color);
-    padding: 0.75rem;
-    border-radius: var(--border-radius);
-    text-align: center;
-}
-
-.value-card .label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.25rem;
-}
-
-.value-card .value {
-    font-size: 1.25rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
+#graphs-container, #values-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
 }
