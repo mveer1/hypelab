@@ -12,6 +12,7 @@ body[data-theme=light] {
   --success-color: #38b000;
   --warning-color: #ffbe0b;
   --error-color: #ff5a5f;
+  --loader-color: #212529;
   --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --border-radius: 8px;
   --transition-speed: 0.3s;
@@ -31,6 +32,7 @@ body[data-theme=dark] {
   --success-color: #38b000;
   --warning-color: #ffbe0b;
   --error-color: #ff5a5f;
+  --loader-color: #e0e0e0;
   --font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --border-radius: 8px;
   --transition-speed: 0.3s;
@@ -139,10 +141,11 @@ body {
 }
 
 .value-card {
-  background-color: var(--background-color);
+  background-color: var(--surface-color);
   padding: 0.75rem;
   border-radius: var(--border-radius);
   text-align: center;
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .value-card .label {
@@ -275,24 +278,29 @@ footer a {
   main {
     flex-direction: column;
   }
+
   .simulation-menu {
     width: 100%;
     margin-bottom: 1rem;
   }
+
   .category-tabs {
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
   }
+
   .category-tabs li {
     padding: 0.75rem 1rem;
   }
 }
+
 @media (max-width: 480px) {
   .logo h1 {
     font-size: 1.5rem;
   }
 }
+
 .controls-panel {
   background-color: var(--surface-color);
   border-radius: var(--border-radius);
@@ -389,20 +397,84 @@ footer a {
   z-index: 10;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(58, 134, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: var(--primary-color);
-  animation: spin 1s linear infinite;
+/* Minimalist Planet Loader */
+.planet-loader {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+.sun {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  margin-left: -6px;
+  background-color: var(--loader-color);
+  border-radius: 50%;
+  z-index: 3;
+}
+
+.planet-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.inner-orbit {
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
+  margin-left: -15px;
+  animation: orbit 2s linear infinite;
+}
+
+.outer-orbit {
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  margin-left: -25px;
+  animation: orbit 4s linear infinite;
+}
+
+.planet {
+  position: absolute;
+  background-color: var(--loader-color);
+  border-radius: 50%;
+}
+
+.inner-planet {
+  top: 0;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  margin-left: -3px;
+}
+
+.outer-planet {
+  top: 0;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  margin-left: -4px;
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
   }
 }
+
 .data-display {
   border-top: 1px solid var(--border-color);
   padding-top: 1rem;
@@ -414,12 +486,42 @@ footer a {
   border-bottom: 1px solid var(--border-color);
 }
 
-#graphs-container, #values-container {
+#graphs-container, #values-container, #formulas-container, #energy-graph{
   width: 100%;
-  height: 100%;
+  height: 400px;
+}
+
+#values-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
 }
 
-/*# sourceMappingURL=style.css.map */
+.formula-card {
+  background-color: var(--surface-color);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.formula-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.formula-content {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.formula {
+  margin: 0.75rem 0;
+  padding: 0.5rem;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+  font-family: monospace;
+}

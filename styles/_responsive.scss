@@ -1,23 +1,64 @@
+@media (max-width: 1024px) {
+  .home-categories {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .home-category {
+    width: 100%;
+    max-width: none;
+  }
+}
+
 @media (max-width: 768px) {
   main {
     flex-direction: column;
   }
+  
   .simulation-menu {
     width: 100%;
     margin-bottom: 1rem;
   }
+  
   .category-tabs {
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
   }
+  
   .category-tabs li {
     padding: 0.75rem 1rem;
+  }
+  
+  .home-category {
+    height: 120px;
+  }
+  
+  .solar-system-loader {
+    transform: scale(0.7);
   }
 }
 
 @media (max-width: 480px) {
   .logo h1 {
     font-size: 1.5rem;
+  }
+  
+  .home-category {
+    height: 80px;
+    font-size: 1.2rem;
+  }
+  
+  .solar-system-loader {
+    transform: scale(0.5);
+  }
+  
+  #data-tabs {
+    flex-direction: column;
+  }
+  
+  .data-tab {
+    width: 100%;
+    text-align: center;
   }
 }

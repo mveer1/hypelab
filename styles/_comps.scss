@@ -1,3 +1,5 @@
+
+
 .theme-toggle {
   display: flex;
   align-items: center;
@@ -79,18 +81,51 @@
 }
 
 .value-card {
-  background-color: var(--background-color);
+  background-color: var(--surface-color);
   padding: 0.75rem;
   border-radius: var(--border-radius);
   text-align: center;
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
+
 .value-card .label {
   font-size: 0.875rem;
   color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
+
 .value-card .value {
   font-size: 1.25rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+}
+
+
+.formula-card {
+  background-color: var(--surface-color);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.formula-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.formula-content {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.formula {
+  margin: 0.75rem 0;
+  padding: 0.5rem;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+  font-family: monospace;
 }

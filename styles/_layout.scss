@@ -111,3 +111,49 @@ footer a {
   color: var(--primary-color);
   text-decoration: none;
 }
+
+/* Home page styles */
+.home-categories {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin: 4rem 0;
+  flex-wrap: wrap;
+}
+
+.home-category {
+  flex: 1 1 200px;
+  min-width: 200px;
+  max-width: 300px;
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.home-category:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 6px 24px var(--shadow-color);
+  border-color: var(--primary-color);
+}
+
+.home-category h2 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.home-category p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}

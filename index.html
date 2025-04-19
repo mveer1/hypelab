@@ -30,7 +30,7 @@
       <aside class="simulation-menu">
         <h2>Experiments</h2>
         <ul id="simulation-list">
-          <li class="active">Simulation 1</li>
+          <li class="active" data-sim="pendulum">N-Pendulum</li>
         </ul>
       </aside>
       <section class="simulation-container">
@@ -39,40 +39,39 @@
             <h3>Controls</h3>
             <button class="control-btn" id="reset-btn">Reset</button>
           </div>
-          <!-- <div class="parameters">
-            <div class="parameter">
-              <label for="param1">Parameter 1</label>
-              <div class="parameter-value">
-                <input type="range" id="param1" min="0" max="100" value="50">
-                <span class="value" id="param1-value">50</span>
-              </div>
-            </div>
-            Add more parameters as needed
-          </div> -->
+          <div class="parameters" id="pendulum-parameters">
+            <!-- Parameters will be dynamically added by JavaScript -->
+          </div>
         </div>
         <div class="canvas-wrapper">
           <canvas id="simulation-canvas"></canvas>
-          <div id="loading-indicator" class="hidden">
-            <div class="spinner"></div>
+          <!-- <div id="loading-indicator" class="hidden">
+            <div class="planet-loader">
+              <div class="sun"></div>
+              <div class="planet-orbit inner-orbit">
+                <div class="planet inner-planet"></div>
+              </div>
+              <div class="planet-orbit outer-orbit">
+                <div class="planet outer-planet"></div>
+              </div>
+            </div>
             <span>Simulation under construction...</span>
-          </div>
+          </div> -->
         </div>
         <div class="data-display">
           <div id="data-tabs">
             <button class="data-tab active" data-tab="graphs">Graphs</button>
             <button class="data-tab" data-tab="values">Values</button>
+            <button class="data-tab" data-tab="formulas">Formulas</button>
           </div>
           <div class="tab-content active" id="graphs-container">
-            <!-- Graphs go here -->
-            <div class="text-center">Graphs content</div>
+            <canvas id="energy-graph"></canvas>
           </div>
           <div class="tab-content" id="values-container">
-            <!-- Values go here -->
-            <div class="value-card">
-              <div class="label">Value 1</div>
-              <div class="value">123</div>
-            </div>
-            <!-- Add more value cards as needed -->
+            <!-- Values will be dynamically added by JavaScript -->
+          </div>
+          <div class="tab-content" id="formulas-container">
+            <!-- Formulas will be dynamically added by JavaScript -->
           </div>
         </div>
       </section>
@@ -81,6 +80,8 @@
       &copy; 2025 Simulation Dashboard. All rights reserved.
     </footer>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="src/core/pendulum.js"></script>
   <script src="src/main.js"></script>
 </body>
 </html>

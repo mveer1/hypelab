@@ -81,7 +81,7 @@
     linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
   background-size: 20px 20px;
 }
- 
+
 #loading-indicator {
   position: absolute;
   top: 0;
@@ -92,22 +92,116 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(30,30,30,0.8);
+  background-color: rgba(30, 30, 30, 0.8);
   z-index: 10;
 }
 
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(58,134,255,0.3);
-  border-radius: 50%;
-  border-top-color: var(--primary-color);
-  animation: spin 1s linear infinite;
+/* Solar System Loader */
+.solar-system-loader {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 20px;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+.sun {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
+  margin-left: -15px;
+  background-color: var(--sun-color);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 160, 60, 0.4);
+  z-index: 10;
+}
+
+.earth-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  margin-top: -40px;
+  margin-left: -40px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: orbit 4s linear infinite;
+}
+
+.earth {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  margin-left: -5px;
+  background-color: var(--earth-color);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(58, 134, 255, 0.4);
+}
+
+.mars-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  margin-top: -60px;
+  margin-left: -60px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: orbit 8s linear infinite;
+}
+
+.mars {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  margin-left: -4px;
+  background-color: var(--mars-color);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 90, 95, 0.4);
+}
+
+.jupiter-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 160px;
+  height: 160px;
+  margin-top: -80px;
+  margin-left: -80px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  animation: orbit 12s linear infinite;
+}
+
+.jupiter {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 15px;
+  height: 15px;
+  margin-top: -7.5px;
+  margin-left: -7.5px;
+  background-color: var(--jupiter-color);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(255, 190, 11, 0.4);
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
   }
 }
 
@@ -122,10 +216,18 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-#graphs-container, #values-container {
+#graphs-container, #values-container, #formulas-container {
   width: 100%;
   height: 100%;
+}
+
+#values-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1rem;
+}
+
+#energy-graph {
+  width: 100%;
+  height: 100%;
 }
