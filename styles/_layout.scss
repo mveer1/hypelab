@@ -1,0 +1,121 @@
+
+/* Container layout */
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header styles */
+header {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Navigation tabs */
+.category-tabs {
+    display: flex;
+    list-style: none;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.category-tabs li {
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color var(--transition-speed), border-color var(--transition-speed);
+    border-bottom: 3px solid transparent;
+}
+
+.category-tabs li:hover {
+    color: var(--primary-color);
+}
+
+.category-tabs li.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* Main content area */
+main {
+    display: flex;
+    flex: 1;
+    padding: 1rem 0;
+    gap: 1.5rem;
+}
+
+/* Simulation menu sidebar */
+.simulation-menu {
+    width: 250px;
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+.simulation-menu h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#simulation-list {
+    list-style: none;
+}
+
+#simulation-list li {
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color var(--transition-speed);
+}
+
+#simulation-list li:hover {
+    background-color: var(--grid-color);
+}
+
+#simulation-list li.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Simulation container */
+.simulation-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Footer */
+footer {
+    padding: 1rem 0;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}

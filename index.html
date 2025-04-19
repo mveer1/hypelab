@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Lab</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
+    <script srgrapc="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with logo and navigation -->
+        <header>
+            <div class="logo">
+                <h1>Physics Lab</h1>
+                <div class="theme-toggle">
+                    <input type="checkbox" id="theme-switch">
+                    <label for="theme-switch" class="switch-label">
+                        <span class="toggle"></span>
+                    </label>
+                </div>
+            </div>
+            <nav>
+                <ul class="category-tabs">
+                    <li data-category="core" class="active">Core Mechanics</li>
+                    <li data-category="quantum">Quantum Arena</li>
+                    <li data-category="gravity">Gravity Field</li>
+                    <li data-category="chaos">Chaos Theatre</li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main content area -->
+        <main>
+            <!-- Simulation selection sidebar -->
+            <aside class="simulation-menu">
+                <h2 id="category-title">Core Mechanics</h2>
+                <ul id="simulation-list">
+                    <!-- Dynamically populated based on category -->
+                </ul>
+            </aside>
+
+            <!-- Simulation canvas and controls -->
+            <section class="simulation-container">
+                <div class="canvas-wrapper">
+                    <canvas id="simulation-canvas"></canvas>
+                    <div id="loading-indicator" class="hidden">
+                        <div class="spinner"></div>
+                        <p>Loading simulation...</p>
+                    </div>
+                </div>
+                <div class="controls-panel">
+                    <div class="controls-header">
+                        <h3 id="simulation-title">Select a simulation</h3>
+                        <button id="reset-btn" class="control-btn">Reset</button>
+                    </div>
+                    <div id="parameters" class="parameters">
+                        <!-- Dynamically populated based on simulation -->
+                    </div>
+                    <div class="data-display">
+                        <div id="data-tabs">
+                            <button class="data-tab active" data-tab="graphs">Graphs</button>
+                            <button class="data-tab" data-tab="values">Values</button>
+                        </div>
+                        <div id="graphs-container" class="tab-content active">
+                            <!-- Graphs will be rendered here -->
+                        </div>
+                        <div id="values-container" class="tab-content">
+                            <!-- Real-time values will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer with info and links -->
+        <footer>
+            <p>Physics Lab &copy; 2024 | <a href="#" id="about-link">About</a></p>
+        </footer>
+
+        <!-- Modal for about information -->
+        <!-- <div id="about-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>About Physics Lab</h2>
+                <p>Physics Lab is an interactive platform for exploring physics concepts through simulation and visualization.</p>
+                <p>Created as a learning project to explore physics and web technologies.</p>
+            </div>
+        </div> -->
+    </div>
+
+    <!-- Scripts -->
+    <!-- <script type="module" src="main.js"></script> -->
+</body>
+</html>
