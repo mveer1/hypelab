@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Simulation Dashboard</title>
+  <title>Physics Hyperion</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="images/favicon.png" type="image/png">
 </head>
 <body data-theme="light">
   <div class="container">
     <header>
       <div class="logo">
-        <h1>Simulation Dashboard</h1>
+        <h1>Physics Hyperion</h1>
         <div class="theme-toggle">
           <input type="checkbox" id="theme-switch" />
           <label for="theme-switch" class="switch-label">
@@ -18,19 +20,17 @@
         </div>
       </div>
       <ul class="category-tabs" id="category-tabs">
-        <li data-category="core" class="active">Core</li>
-        <li data-category="quantum">Quantum</li>
-        <li data-category="astro">Astro</li>
-        <li data-category="bio">Bio</li>
+        <li data-category="Core" class="active">Core Lab</li>
+        <li data-category="Quantum">Quantum area</li>
+        <li data-category="Gravity">Gravity field</li>
+        <li data-category="Chaos">Chaos theatre</li>
       </ul>
     </header>
     <main>
       <aside class="simulation-menu">
-        <h2>Simulations</h2>
+        <h2>Experiments</h2>
         <ul id="simulation-list">
           <li class="active">Simulation 1</li>
-          <li>Simulation 2</li>
-          <li>Simulation 3</li>
         </ul>
       </aside>
       <section class="simulation-container">
@@ -39,7 +39,7 @@
             <h3>Controls</h3>
             <button class="control-btn" id="reset-btn">Reset</button>
           </div>
-          <div class="parameters">
+          <!-- <div class="parameters">
             <div class="parameter">
               <label for="param1">Parameter 1</label>
               <div class="parameter-value">
@@ -47,14 +47,14 @@
                 <span class="value" id="param1-value">50</span>
               </div>
             </div>
-            <!-- Add more parameters as needed -->
-          </div>
+            Add more parameters as needed
+          </div> -->
         </div>
         <div class="canvas-wrapper">
           <canvas id="simulation-canvas"></canvas>
           <div id="loading-indicator" class="hidden">
             <div class="spinner"></div>
-            <span>Loading simulation...</span>
+            <span>Simulation under construction...</span>
           </div>
         </div>
         <div class="data-display">
