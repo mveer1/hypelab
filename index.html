@@ -1,87 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Physics Hyperion</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-  <link rel="icon" href="images/favicon.png" type="image/png">
+    <meta charset="UTF-8">
+    <title>Physics Hyperion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="light">
-  <div class="container">
-    <header>
-      <div class="logo">
-        <h1>Physics Hyperion</h1>
-        <div class="theme-toggle">
-          <input type="checkbox" id="theme-switch" />
-          <label for="theme-switch" class="switch-label">
-            <span class="toggle"></span>
-          </label>
-        </div>
-      </div>
-      <ul class="category-tabs" id="category-tabs">
-        <li data-category="Core" class="active">Core Lab</li>
-        <li data-category="Quantum">Quantum area</li>
-        <li data-category="Gravity">Gravity field</li>
-        <li data-category="Chaos">Chaos theatre</li>
-      </ul>
-    </header>
-    <main>
-      <aside class="simulation-menu">
-        <h2>Experiments</h2>
-        <ul id="simulation-list">
-          <li class="active" data-sim="pendulum">N-Pendulum</li>
-        </ul>
-      </aside>
-      <section class="simulation-container">
-        <div class="controls-panel">
-          <div class="controls-header">
-            <h3>Controls</h3>
-            <button class="control-btn" id="reset-btn">Reset</button>
-          </div>
-          <div class="parameters" id="pendulum-parameters">
-            <!-- Parameters will be dynamically added by JavaScript -->
-          </div>
-        </div>
-        <div class="canvas-wrapper">
-          <canvas id="simulation-canvas"></canvas>
-          <!-- <div id="loading-indicator" class="hidden">
-            <div class="planet-loader">
-              <div class="sun"></div>
-              <div class="planet-orbit inner-orbit">
-                <div class="planet inner-planet"></div>
-              </div>
-              <div class="planet-orbit outer-orbit">
-                <div class="planet outer-planet"></div>
-              </div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>PhysicsHyperion</h1>
+                <div class="theme-toggle">
+                    <input type="checkbox" id="theme-switch" />
+                    <label for="theme-switch" class="switch-label">
+                        <span class="toggle"></span>
+                    </label>
+                </div>
             </div>
-            <span>Simulation under construction...</span>
-          </div> -->
-        </div>
-        <div class="data-display">
-          <div id="data-tabs">
-            <button class="data-tab active" data-tab="graphs">Graphs</button>
-            <button class="data-tab" data-tab="values">Values</button>
-            <button class="data-tab" data-tab="formulas">Formulas</button>
-          </div>
-          <div class="tab-content active" id="graphs-container">
-            <canvas id="energy-graph"></canvas>
-          </div>
-          <div class="tab-content" id="values-container">
-            <!-- Values will be dynamically added by JavaScript -->
-          </div>
-          <div class="tab-content" id="formulas-container">
-            <!-- Formulas will be dynamically added by JavaScript -->
-          </div>
-        </div>
-      </section>
-    </main>
-    <footer>
-      &copy; 2025 Simulation Dashboard. All rights reserved.
-    </footer>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="src/core/pendulum.js"></script>
-  <script src="src/main.js"></script>
+            <ul class="category-tabs" id="category-tabs">
+              <li data-category="Core" class="active">Core Lab</li>
+              <li data-category="Quantum">Quantum area</li>
+              <li data-category="Gravity">Gravity field</li>
+              <li data-category="Chaos">Chaos theatre</li>
+            </ul>
+        </header>
+        <main>
+            <div class="simulation-menu">
+                <h2>Simulations</h2>
+                <ul id="simulation-list">
+                    <!-- Simulation items will be added dynamically -->
+                </ul>
+            </div>
+            <div class="simulation-container">
+                <div class="canvas-wrapper">
+                    <canvas id="simulation-canvas"></canvas>
+                    <div id="loading-indicator" class="hidden">
+                        <div class="planet-loader">
+                            <div class="sun"></div>
+                            <div class="planet-orbit inner-orbit">
+                                <div class="planet inner-planet"></div>
+                            </div>
+                            <div class="planet-orbit outer-orbit">
+                                <div class="planet outer-planet"></div>
+                            </div>
+                        </div>
+                        <p>Loading simulation...</p>
+                    </div>
+                </div>
+                <div class="controls-panel">
+                    <div class="controls-header">
+                        <h3>Controls</h3>
+                        <button id="reset-btn" class="control-btn">Reset</button>
+                    </div>
+                    <div id="parameters" class="parameters">
+                        <!-- Parameters will be added dynamically -->
+                    </div>
+                </div>
+                <div class="data-display">
+                    <div id="data-tabs">
+                        <button class="data-tab active" data-tab="graphs">Graphs</button>
+                        <button class="data-tab" data-tab="values">Values</button>
+                        <button class="data-tab" data-tab="formulas">Formulas</button>
+                    </div>
+                    <div id="graphs-container" class="tab-content active">
+                      <canvas id="energy-graph"></canvas>
+                    </div>
+                    <div id="values-container" class="tab-content">
+                        <!-- Values will be added dynamically -->
+                    </div>
+                    <div id="formulas-container" class="tab-content">
+                        <!-- Formulas will be added dynamically -->
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>Physics Lab - Interactive Physics Simulations | <a href="#">About</a></p>
+        </footer>
+    </div>
+
+    <!-- Load libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Load simulation modules -->
+    <script src="src/core/newtonsCradle.js"></script>
+    <script src="src/chaos/doublependulum.js"></script>
+    
+    <!-- Load main script -->
+    <script src="src/main.js"></script>
+
+    
+    <script>
+    console.log('Main.js loading...');
+    </script>
+    <script>
+      // This will run after everything else has loaded
+      document.addEventListener('DOMContentLoaded', function() {
+          // Force update the simulation list
+          setTimeout(function() {
+              console.log('Forcing simulation list update...');
+              const simulationList = document.getElementById('simulation-list');
+              if (simulationList) {
+                  // Check if the list is empty
+                  if (simulationList.children.length === 0) {
+                      console.log('Simulation list is empty, forcing update...');
+                      // Try to update it
+                      if (typeof updateSimulationList === 'function') {
+                          updateSimulationList();
+                      }
+                  }
+              }
+          }, 500); // Wait 500ms to ensure everything is loaded
+      });
+  </script>
 </body>
 </html>
