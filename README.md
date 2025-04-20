@@ -1,5 +1,6 @@
-# hypelab
-
+# Physics hyperion
+is an immersive, interactive platform that brings advanced physics experiments to your browser. 
+It’s an educational and visually engaging tool for exploring the wonders of physics.
 
 ## how to run
 This is under construction but if you'd like to run it: 
