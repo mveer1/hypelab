@@ -88,33 +88,16 @@
     <!-- Load simulation modules -->
     <script src="src/core/newtonsCradle.js"></script>
     <script src="src/chaos/doublependulum.js"></script>
+    <script src="src/core/harmoniOscillator.js"></script>
+    <script src="src/Quantum/waveFunction.js"></script>
+    <script src="src/Quantum/particleInBox.js"></script>
+    <!-- <script src="src/chaos/doublependulum.js"></script>
+    <script src="src/core/harmoniOscillator.js"</script>
+    <script src="src/Quantum/particleInBox.js"</script>
+    <script src="src/Quantum/waveFunction.js"</script> -->
+    
     
     <!-- Load main script -->
     <script src="src/main.js"></script>
-
-    
-    <script>
-    console.log('Main.js loading...');
-    </script>
-    <script>
-      // This will run after everything else has loaded
-      document.addEventListener('DOMContentLoaded', function() {
-          // Force update the simulation list
-          setTimeout(function() {
-              console.log('Forcing simulation list update...');
-              const simulationList = document.getElementById('simulation-list');
-              if (simulationList) {
-                  // Check if the list is empty
-                  if (simulationList.children.length === 0) {
-                      console.log('Simulation list is empty, forcing update...');
-                      // Try to update it
-                      if (typeof updateSimulationList === 'function') {
-                          updateSimulationList();
-                      }
-                  }
-              }
-          }, 500); // Wait 500ms to ensure everything is loaded
-      });
-  </script>
 </body>
 </html>

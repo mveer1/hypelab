@@ -58,6 +58,7 @@ class DoublePendulum {
                 value: this.gravity,
                 onChange: (value) => {
                     this.gravity = value;
+                    this.reset();
                 }
             },
             {
@@ -69,6 +70,7 @@ class DoublePendulum {
                 value: this.damping,
                 onChange: (value) => {
                     this.damping = value;
+                    this.reset();
                 }
             },
             {
@@ -80,6 +82,7 @@ class DoublePendulum {
                 value: this.length1,
                 onChange: (value) => {
                     this.length1 = value;
+                    this.reset();
                 }
             },
             {
@@ -91,6 +94,7 @@ class DoublePendulum {
                 value: this.length2,
                 onChange: (value) => {
                     this.length2 = value;
+                    this.reset();
                 }
             },
             {
@@ -102,6 +106,7 @@ class DoublePendulum {
                 value: this.mass1,
                 onChange: (value) => {
                     this.mass1 = value;
+                    this.reset();
                 }
             },
             {
@@ -113,6 +118,7 @@ class DoublePendulum {
                 value: this.mass2,
                 onChange: (value) => {
                     this.mass2 = value;
+                    this.reset();
                 }
             },
             {
@@ -127,6 +133,7 @@ class DoublePendulum {
                     if (!this.isPaused) {
                         this.angularVelocity1 = 0;
                     }
+                    this.reset();
                 }
             },
             {
@@ -141,6 +148,7 @@ class DoublePendulum {
                     if (!this.isPaused) {
                         this.angularVelocity2 = 0;
                     }
+                    this.reset();
                 }
             },
             {
@@ -153,6 +161,7 @@ class DoublePendulum {
                     if (!value) {
                         this.trailPoints = [];
                     }
+                    this.reset();
                 }
             },
             {
@@ -168,6 +177,7 @@ class DoublePendulum {
                         this.comparisonAngularVelocity1 = this.angularVelocity1;
                         this.comparisonAngularVelocity2 = this.angularVelocity2;
                     }
+                    this.reset();
                 }
             },
             {
@@ -182,6 +192,7 @@ class DoublePendulum {
                     } else {
                         this.chaosTrials = [];
                     }
+                    this.reset();
                 }
             },
             {

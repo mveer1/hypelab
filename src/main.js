@@ -27,11 +27,11 @@ let simulationInstance = null;
 const simulationCatalog = {
     Core: [
         { id: 'newtonsCradle', name: "Newton's Cradle", ready: true },
-        { id: 'core-sim2', name: "Harmonic Oscillator", ready: false }
+        { id: 'harmonic', name: "Harmonic Oscillator", ready: true }
     ],
     Quantum: [
-        { id: 'quantum-sim1', name: "Wave Function", ready: false },
-        { id: 'quantum-sim2', name: "Particle in a Box", ready: false }
+        { id: 'wave', name: "Wave Function", ready: true },
+        { id: 'particle', name: "Particle in Box", ready: true }
     ],
     Gravity: [
         { id: 'gravity-sim1', name: "Orbital Motion", ready: false },
@@ -254,7 +254,7 @@ function loadSimulation(simId) {
         newCanvas.id = 'energy-graph';
         graphContainer.appendChild(newCanvas);
     }
-    
+
     // Initialize the simulation
     setTimeout(() => {
         if (simInfo && simInfo.ready) {
@@ -265,6 +265,15 @@ function loadSimulation(simId) {
                   break;
               case 'doublePendulum':
                   simulationInstance = new DoublePendulum(canvas, ctx);
+                  break;
+              case 'harmonic':
+                  simulationInstance = new HarmonicOscillator(canvas, ctx);
+                  break;
+              case 'wave':
+                  simulationInstance = new WaveFunction(canvas, ctx);
+                  break;
+              case 'particle':
+                  simulationInstance = new ParticleInBox(canvas, ctx);
                   break;
               // Add other simulations as they are implemented
               default:

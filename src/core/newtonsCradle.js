@@ -35,6 +35,7 @@ class NewtonsCradle {
             value: this.gravity,
             onChange: (value) => {
                 this.gravity = value;
+                this.reset();
             }
         },
         {
@@ -46,6 +47,7 @@ class NewtonsCradle {
             value: this.restitution,
             onChange: (value) => {
                 this.restitution = value;
+                this.reset();
             }
         },
         {
