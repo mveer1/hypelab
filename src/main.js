@@ -34,13 +34,13 @@ const simulationCatalog = {
         { id: 'particle', name: "Particle in Box", ready: true }
     ],
     Gravity: [
-        { id: 'gravity-sim1', name: "Orbital Motion", ready: false },
-        { id: 'gravity-sim2', name: "Gravitational Lensing", ready: false }
+      { id: 'gravitationalLensing', name: "Gravitational Lensing", ready: true },
+      { id: 'orbitalMotion', name: "Orbital Motion", ready: true }
     ],
     Chaos: [
       { id: 'doublePendulum', name: "Double Pendulum", ready: true },
-      { id: 'chaos-sim2', name: "Lorenz Attractor", ready: false }
-    ]  
+      { id: 'lorenzAttractor', name: "Lorenz Attractor", ready: true }
+    ]
 };
 
 // Theme toggle logic
@@ -263,9 +263,6 @@ function loadSimulation(simId) {
               case 'newtonsCradle':
                   simulationInstance = new NewtonsCradle(canvas, ctx);
                   break;
-              case 'doublePendulum':
-                  simulationInstance = new DoublePendulum(canvas, ctx);
-                  break;
               case 'harmonic':
                   simulationInstance = new HarmonicOscillator(canvas, ctx);
                   break;
@@ -274,6 +271,18 @@ function loadSimulation(simId) {
                   break;
               case 'particle':
                   simulationInstance = new ParticleInBox(canvas, ctx);
+                  break;
+              case 'orbitalMotion':
+                  simulationInstance = new OrbitalMotion(canvas, ctx);
+                  break;
+              case 'gravitationalLensing':
+                  simulationInstance = new GravitationalLensing(canvas, ctx);
+                  break;
+              case 'doublePendulum':
+                  simulationInstance = new DoublePendulum(canvas, ctx);
+                  break;
+              case 'lorenzAttractor':
+                  simulationInstance = new LorenzAttractor(canvas, ctx);
                   break;
               // Add other simulations as they are implemented
               default:
@@ -424,8 +433,12 @@ function createValueCards(values) {
         
         const value = document.createElement('div');
         value.className = 'value';
-        value.textContent = val.value.toFixed(val.precision || 2);
-        
+        if (typeof val.value === 'number') {
+          value.textContent = val.value.toFixed(val.precision || 2);
+        } else {
+          value.textContent = val.value;
+        }
+
         card.appendChild(label);
         card.appendChild(value);
         
@@ -480,10 +493,12 @@ function startAnimationLoop() {
                 simulationInstance.values.forEach(val => {
                     const valueElement = document.querySelector(`#value-${val.id} .value`);
                     if (valueElement) {
+                        // console.log("val.value before updating:", val.value);
                         valueElement.textContent = val.value.toFixed(val.precision || 2);
                     }
                 });
             }
+
         }
         
         // Request next frame

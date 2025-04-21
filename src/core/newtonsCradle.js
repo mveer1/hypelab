@@ -1,393 +1,514 @@
 class NewtonsCradle {
-  constructor(canvas, ctx) {
-    this.canvas = canvas;
-    this.ctx = ctx;
-    
-    // Physics constants
-    this.gravity = 9.81;
-    this.restitution = 1.0;
-    this.totalPendulums = 5;
-    this.pendulumsToPull = 1;
-    
-    // Pendulum properties
-    this.pendulumRadius = 20;
-    this.pendulumSpacing = 2.1 * this.pendulumRadius;
-    this.stringLength = 200;
-    this.maxAngle = Math.PI / 4;
-      
-       // Energy chart
-    this.energyChart = null;
-    
-    // Initialize pendulums
-    this.reset();
-    
-    // Initialize energy chart
-    this.initEnergyChart();
-      
-    // Define parameters for UI controls
-    this.parameters = [
-        {
-            id: 'gravity',
-            name: 'Gravity (m/s²)',
-            min: 1,
-            max: 20,
-            step: 0.1,
-            value: this.gravity,
-            onChange: (value) => {
-                this.gravity = value;
-                this.reset();
-            }
-        },
-        {
-            id: 'restitution',
-            name: 'Restitution',
-            min: 0.1,
-            max: 1.0,
-            step: 0.01,
-            value: this.restitution,
-            onChange: (value) => {
-                this.restitution = value;
-                this.reset();
-            }
-        },
-        {
-            id: 'totalPendulums',
-            name: 'Total Pendulums',
-            min: 2,
-            max: 10,
-            step: 1,
-            value: this.totalPendulums,
-            onChange: (value) => {
-                this.totalPendulums = value;
-                this.reset();
-            }
-        },
-        {
-            id: 'pendulumsToPull',
-            name: 'Pendulums to Pull',
-            min: 1,
-            max: this.totalPendulums - 1,
-            step: 1,
-            value: this.pendulumsToPull,
-            onChange: (value) => {
-                this.pendulumsToPull = Math.min(value, this.totalPendulums - 1);
-                this.reset();
-            }
-        }
-    ];
-    
-    // Define values for display
-    this.values = [
-        {
-            id: 'kineticEnergy',
-            name: 'Kinetic Energy (J)',
-            value: 0,
-            precision: 2
-        },
-        {
-            id: 'potentialEnergy',
-            name: 'Potential Energy (J)',
-            value: 0,
-            precision: 2
-        },
-        {
-            id: 'totalEnergy',
-            name: 'Total Energy (J)',
-            value: 0,
-            precision: 2
-        },
-        {
-            id: 'momentum',
-            name: 'Total Momentum',
-            value: 0,
-            precision: 2
-        }
-    ];
-    
-    // Define formulas
-    this.formulas = [
-        {
-            title: 'Conservation of Momentum',
-            description: 'In an elastic collision, momentum is conserved.',
-            equation: 'm₁v₁ + m₂v₂ = m₁v₁\' + m₂v₂\''
-        },
-        {
-            title: 'Conservation of Energy',
-            description: 'In an elastic collision, kinetic energy is conserved.',
-            equation: '½m₁v₁² + ½m₂v₂² = ½m₁v₁\'² + ½m₂v₂\'²'
-        },
-        {
-            title: 'Pendulum Period',
-            description: 'The period of a simple pendulum depends on its length and gravity.',
-            equation: 'T = 2π√(L/g)'
-        }
-    ];
-  }
-  
-  reset() {
-      // Create pendulums
-      this.pendulums = [];
-      
-      for (let i = 0; i < this.totalPendulums; i++) {
-          this.pendulums.push({
-              x: 0, // Will be set in onResize
-              y: 0, // Will be set in onResize
-              angle: 0,
-              velocity: 0,
-              mass: 1
-          });
-      }
-      
-      // Set initial angles for pulled pendulums
-      for (let i = 0; i < this.pendulumsToPull; i++) {
-          this.pendulums[i].angle = -this.maxAngle;
-      }
-      
-      // Calculate positions
-      this.onResize(this.canvas.width, this.canvas.height);
-  }
-  
-  onResize(width, height) {
-      // Calculate the center point for the pendulum array
-      this.centerX = width / 2;
-      this.centerY = height / 3;
-      
-      // Calculate pendulum positions
-      this.updatePendulumPositions();
-  }
-  
-  updatePendulumPositions() {
-      // Calculate the starting x position to center the pendulums
-      const totalWidth = (this.totalPendulums - 1) * this.pendulumSpacing;
-      const startX = this.centerX - totalWidth / 2;
-      
-      for (let i = 0; i < this.pendulums.length; i++) {
-          const pendulum = this.pendulums[i];
-          
-          // Calculate pivot point (where string attaches to ceiling)
-          const pivotX = startX + i * this.pendulumSpacing;
-          const pivotY = this.centerY - this.stringLength;
-          
-          // Calculate pendulum position based on angle
-          pendulum.pivotX = pivotX;
-          pendulum.pivotY = pivotY;
-          pendulum.x = pivotX + this.stringLength * Math.sin(pendulum.angle);
-          pendulum.y = pivotY + this.stringLength * Math.cos(pendulum.angle);
-      }
-  }
-  
-  update(dt) {
-      // Apply smaller time steps for stability
-      const subSteps = 10;
-      const subDt = dt / subSteps;
-      
-      for (let step = 0; step < subSteps; step++) {
-          // Update pendulum physics
-          for (let i = 0; i < this.pendulums.length; i++) {
-              const pendulum = this.pendulums[i];
-              
-              // Calculate acceleration due to gravity
-              const acceleration = -this.gravity / this.stringLength * Math.sin(pendulum.angle);
-              
-              // Update velocity and angle
-              pendulum.velocity += acceleration * subDt;
-              pendulum.angle += pendulum.velocity * subDt;
-          }
-          
-          // Update positions
-          this.updatePendulumPositions();
-          
-          // Check for collisions
-          this.handleCollisions();
-      }
-      
-      // Calculate energy values
-      this.calculateEnergy();
-      
-      // Update energy chart
-      this.updateEnergyChart();
-      
-      // Draw the simulation
-      this.draw();
-  }
-  
-  handleCollisions() {
-      // Check for collisions between adjacent pendulums
-      for (let i = 0; i < this.pendulums.length - 1; i++) {
-          const p1 = this.pendulums[i];
-          const p2 = this.pendulums[i + 1];
-          
-          // Calculate distance between pendulums
-          const dx = p2.x - p1.x;
-          const dy = p2.y - p1.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          // If pendulums are overlapping
-          if (distance < 2 * this.pendulumRadius) {
-              // Calculate collision normal
-              const nx = dx / distance;
-              const ny = dy / distance;
-              
-              // Calculate relative velocity along normal
-              const v1 = p1.velocity * this.stringLength;
-              const v2 = p2.velocity * this.stringLength;
-              
-              // Project velocities onto collision normal
-              const v1n = v1 * Math.cos(p1.angle) * nx + v1 * Math.sin(p1.angle) * ny;
-              const v2n = v2 * Math.cos(p2.angle) * nx + v2 * Math.sin(p2.angle) * ny;
-              
-              // Calculate new velocities (elastic collision)
-              const m1 = p1.mass;
-              const m2 = p2.mass;
-              
-              // Calculate impulse
-              let impulse = (2 * (v1n - v2n)) / (m1 + m2);
-              impulse *= this.restitution;
-              
-              // Apply impulse to velocities
-              p1.velocity -= impulse * m2 * Math.sin(p1.angle);
-              p2.velocity += impulse * m1 * Math.sin(p2.angle);
-              
-              // Move pendulums apart to prevent sticking
-              const overlap = 2 * this.pendulumRadius - distance;
-              p1.angle -= overlap * 0.5 * nx / this.stringLength;
-              p2.angle += overlap * 0.5 * nx / this.stringLength;
-          }
-      }
-  }
-  
-  calculateEnergy() {
-      let kineticEnergy = 0;
-      let potentialEnergy = 0;
-      let momentum = 0;
-      
-      for (const pendulum of this.pendulums) {
-          // Calculate kinetic energy: 0.5 * m * v^2
-          const velocity = pendulum.velocity * this.stringLength;
-          kineticEnergy += 0.5 * pendulum.mass * velocity * velocity;
-          
-          // Calculate potential energy: m * g * h
-          // h = L - L*cos(angle) = L * (1 - cos(angle))
-          const height = this.stringLength * (1 - Math.cos(pendulum.angle));
-          potentialEnergy += pendulum.mass * this.gravity * height;
-          
-          // Calculate momentum
-          momentum += pendulum.mass * velocity;
-      }
-      
-      // Update values
-      this.values[0].value = kineticEnergy;
-      this.values[1].value = potentialEnergy;
-      this.values[2].value = kineticEnergy + potentialEnergy;
-      this.values[3].value = Math.abs(momentum);
-  }
-  
-  getEnergy() {
-      return {
-          kinetic: this.values[0].value,
-          potential: this.values[1].value,
-          total: this.values[2].value
-      };
-  }
-  
-  draw() {
-      // Clear canvas
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      
-      // Draw ceiling
-      this.ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--border-color');
-      this.ctx.fillRect(0, this.centerY - this.stringLength - 10, this.canvas.width, 10);
-      
-      // Draw pendulums
-      for (const pendulum of this.pendulums) {
-          // Draw string
-          this.ctx.beginPath();
-          this.ctx.moveTo(pendulum.pivotX, pendulum.pivotY);
-          this.ctx.lineTo(pendulum.x, pendulum.y);
-          this.ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--text-color');
-          this.ctx.lineWidth = 2;
-          this.ctx.stroke();
-          
-          // Draw pendulum ball
-          this.ctx.beginPath();
-          this.ctx.arc(pendulum.x, pendulum.y, this.pendulumRadius, 0, Math.PI * 2);
-          this.ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--primary-color');
-          this.ctx.fill();
-          this.ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--text-color');
-          this.ctx.lineWidth = 2;
-          this.ctx.stroke();
-      }
-  }
+    constructor(canvas, ctx) {
+        this.canvas = canvas;
+        this.ctx = ctx;
 
-  initEnergyChart() {
-    const graphCanvas = document.getElementById('energy-graph');
-    if (!graphCanvas || !(graphCanvas instanceof HTMLCanvasElement)) {
-        console.error('Energy graph canvas not found or not a canvas element');
-        return;
-    }
-    
-    const ctx = graphCanvas.getContext('2d');
-    this.energyChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: Array(100).fill(''),
-            datasets: [
-                {
-                    label: 'Kinetic Energy',
-                    data: Array(100).fill(0),
-                    borderColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
-                    tension: 0.4,
-                    fill: false
-                },
-                {
-                    label: 'Potential Energy',
-                    data: Array(100).fill(0),
-                    borderColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
-                    tension: 0.4,
-                    fill: false
-                },
-                {
-                    label: 'Total Energy',
-                    data: Array(100).fill(0),
-                    borderColor: getComputedStyle(document.body).getPropertyValue('--accent-color'),
-                    tension: 0.4,
-                    fill: false
+        // Matter.js engine setup
+        this.engine = Matter.Engine.create();
+        this.world = this.engine.world;
+
+        // Simulation parameters
+        this.gravity = 9.81;
+        this.damping = 0.01; // air resistance
+        this.restitution = 0.95; // elasticity
+        this.numBalls = 5; // default number of balls
+        this.ballsPulledBack = 1; // default balls pulled back
+
+        // Ball properties
+        this.ballRadius = 20;
+        this.ballMass = 1;
+        this.stringLength = 200;
+
+        // Arrays to hold balls and constraints
+        this.balls = [];
+        this.constraints = [];
+
+        // State
+        this.isDragging = false;
+        this.draggedBall = null;
+        this.isPaused = false;
+
+        // Energy data for graph
+        this.energyData = {
+            kinetic: Array(this.numBalls).fill(0),
+            potential: Array(this.numBalls).fill(0),
+            total: Array(this.numBalls).fill(0)
+        };
+
+        // Define parameters for UI controls
+        this.parameters = [
+            {
+                id: 'gravity',
+                name: 'Gravity (m/s²)',
+                min: 1,
+                max: 20,
+                step: 0.1,
+                value: this.gravity,
+                onChange: (value) => {
+                    this.gravity = value;
+                    this.engine.gravity.y = value / 9.81;
                 }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: {
-                duration: 0
             },
-            scales: {
-                x: {
-                    display: false
-                },
-                y: {
-                    beginAtZero: true
+            {
+                id: 'damping',
+                name: 'Air Resistance',
+                min: 0,
+                max: 0.1,
+                step: 0.001,
+                value: this.damping,
+                onChange: (value) => {
+                    this.damping = value;
+                    for (let ball of this.balls) {
+                        ball.frictionAir = value;
+                    }
+                }
+            },
+            {
+                id: 'restitution',
+                name: 'Elasticity',
+                min: 0.1,
+                max: 1.0,
+                step: 0.01,
+                value: this.restitution,
+                onChange: (value) => {
+                    this.restitution = value;
+                    for (let ball of this.balls) {
+                        ball.restitution = value;
+                    }
+                }
+            },
+            {
+                id: 'numBalls',
+                name: 'Number of Balls',
+                min: 3,
+                max: 7,
+                step: 1,
+                value: this.numBalls,
+                onChange: (value) => {
+                    this.numBalls = value;
+                    this.reset();
+                }
+            },
+            {
+                id: 'ballsPulledBack',
+                name: 'Balls Pulled Back',
+                min: 1,
+                max: 3,
+                step: 1,
+                value: this.ballsPulledBack,
+                onChange: (value) => {
+                    this.ballsPulledBack = Math.min(value, Math.floor(this.numBalls / 2));
+                    this.reset();
+                }
+            },
+            {
+                id: 'pause',
+                name: 'Pause/Play',
+                type: 'button',
+                onClick: () => {
+                    this.isPaused = !this.isPaused;
+                    return this.isPaused ? 'Play' : 'Pause';
+                }
+            },
+            {
+                id: 'reset',
+                name: 'Reset',
+                type: 'button',
+                onClick: () => {
+                    this.reset();
+                    return 'Reset';
+                }
+            },
+            {
+                id: 'pullLeft',
+                name: 'Pull Left Side',
+                type: 'button',
+                onClick: () => {
+                    this.pullLeftSide();
+                    return 'Pull Left';
+                }
+            },
+            {
+                id: 'pullRight',
+                name: 'Pull Right Side',
+                type: 'button',
+                onClick: () => {
+                    this.pullRightSide();
+                    return 'Pull Right';
                 }
             }
+        ];
+
+        // Values for display
+        this.values = [
+            {
+                id: 'totalMomentum',
+                name: 'Total Momentum',
+                value: 0,
+                precision: 2
+            },
+            {
+                id: 'totalEnergy',
+                name: 'Total Energy',
+                value: 0,
+                precision: 2
+            }
+        ];
+
+        console.log("this.values at load:", this.values);
+
+        // Setup canvas mouse events
+        this.setupMouseEvents();
+
+        // Initialize simulation
+        this.reset();
+
+        // Initialize energy chart
+        this.initEnergyChart();
+        
+
+        // Add individual ball velocities
+        for (let i = 0; i < this.numBalls; i++) {
+            this.values.push({
+                id: `ball${i}`,
+                name: `Ball ${i + 1} Velocity (m/s)`,
+                value: 0,
+                precision: 2
+            });
         }
+
+        // Formulas
+        this.formulas = [
+            {
+                title: 'Conservation of Momentum',
+                description: 'In an elastic collision, momentum is conserved.',
+                equation: 'm₁v₁ + m₂v₂ = m₁v₁\' + m₂v₂\''
+            },
+            {
+                title: 'Conservation of Energy',
+                description: 'In an elastic collision, kinetic energy is conserved.',
+                equation: '½m₁v₁² + ½m₂v₂² = ½m₁v₁\'² + ½m₂v₂\'²'
+            },
+            {
+                title: 'Pendulum Motion',
+                description: 'Position of each ball is determined by pendulum physics and constraints.',
+                equation: 'x = L sin(θ), y = L cos(θ)'
+            }
+        ];
+    }
+
+    setupMouseEvents() {
+        this.canvas.addEventListener('mousedown', (e) => {
+            if (this.isPaused) return;
+            
+            const mousePos = this.getMousePos(e);
+            for (let ball of this.balls) {
+                const dx = mousePos.x - ball.position.x;
+                const dy = mousePos.y - ball.position.y;
+                if (Math.sqrt(dx*dx + dy*dy) < this.ballRadius) {
+                    this.isDragging = true;
+                    this.draggedBall = ball;
+                    Matter.Body.setStatic(ball, true);
+                    break;
+                }
+            }
+        });
+
+        this.canvas.addEventListener('mousemove', (e) => {
+            if (this.isPaused) return;
+            
+            if (this.isDragging && this.draggedBall) {
+                const mousePos = this.getMousePos(e);
+                
+                // Calculate the distance from pivot point
+                const constraint = this.constraints[this.balls.indexOf(this.draggedBall)];
+                const pivotX = constraint.pointA.x;
+                const pivotY = constraint.pointA.y;
+                
+                // Calculate direction vector from pivot to mouse
+                const dx = mousePos.x - pivotX;
+                const dy = mousePos.y - pivotY;
+                
+                // Normalize to string length
+                const distance = Math.sqrt(dx*dx + dy*dy);
+                const normalizedX = dx / distance * this.stringLength;
+                const normalizedY = dy / distance * this.stringLength;
+                
+                // Set position
+                Matter.Body.setPosition(this.draggedBall, {
+                    x: pivotX + normalizedX,
+                    y: pivotY + normalizedY
+                });
+            }
+        });
+
+        this.canvas.addEventListener('mouseup', (e) => {
+            if (this.isPaused) return;
+            
+            if (this.isDragging && this.draggedBall) {
+                Matter.Body.setStatic(this.draggedBall, false);
+                this.isDragging = false;
+                this.draggedBall = null;
+            }
+        });
+    }
+
+    getMousePos(event) {
+        const rect = this.canvas.getBoundingClientRect();
+        return {
+            x: event.clientX - rect.left,
+            y: event.clientY - rect.top
+        };
+    }
+
+    pullLeftSide() {
+        for (let i = 0; i < this.ballsPulledBack; i++) {
+            Matter.Body.setPosition(this.balls[i], {
+                x: this.balls[i].position.x - 100,
+                y: this.balls[i].position.y - 100
+            });
+            Matter.Body.setVelocity(this.balls[i], { x: 0, y: 0 });
+        }
+    }
+
+    pullRightSide() {
+        for (let i = 0; i < this.ballsPulledBack; i++) {
+            const idx = this.numBalls - 1 - i;
+            Matter.Body.setPosition(this.balls[idx], {
+                x: this.balls[idx].position.x + 100,
+                y: this.balls[idx].position.y - 100
+            });
+            Matter.Body.setVelocity(this.balls[idx], { x: 0, y: 0 });
+        }
+    }
+
+    reset() {
+        // Clear world
+        Matter.World.clear(this.world, false);
+        Matter.Engine.clear(this.engine);
+
+        this.balls = [];
+        this.constraints = [];
+
+        // Setup gravity
+        this.engine.gravity.y = this.gravity / 9.81; // normalize to earth gravity
+
+        // Create balls
+        const startX = this.canvas.width / 2 - (this.numBalls - 1) * this.ballRadius * 2 / 2;
+        const startY = this.canvas.height / 3;
+
+        for (let i = 0; i < this.numBalls; i++) {
+            const ball = Matter.Bodies.circle(startX + i * this.ballRadius * 2, startY + this.stringLength, this.ballRadius, {
+                mass: this.ballMass,
+                restitution: this.restitution,
+                frictionAir: this.damping,
+                friction: 0,
+                frictionStatic: 0
+            });
+            this.balls.push(ball);
+            Matter.World.add(this.world, ball);
+
+            // Constraint (string)
+            const constraint = Matter.Constraint.create({
+                pointA: { x: startX + i * this.ballRadius * 2, y: startY },
+                bodyB: ball,
+                length: this.stringLength,
+                stiffness: 1
+            });
+            this.constraints.push(constraint);
+            Matter.World.add(this.world, constraint);
+        }
+
+        // Pull back balls on left side
+        this.pullLeftSide();
+
+        // Reset energy data
+        this.energyData = {
+            kinetic: Array(this.numBalls).fill(0),
+            potential: Array(this.numBalls).fill(0),
+            total: Array(this.numBalls).fill(0)
+        };
+
+        // Reset values
+        console.log("this.values at reset:", this.values);
+        (this.values || []).forEach(val => val.value = 0);
+        
+        // Update values display to match new number of balls
+        while (this.values.length > 2 + this.numBalls) {
+            this.values.pop();
+        }
+        
+        while (this.values.length < 2 + this.numBalls) {
+            const i = this.values.length - 2;
+            this.values.push({
+                id: `ball${i}`,
+                name: `Ball ${i + 1} Velocity (m/s)`,
+                value: 0,
+                precision: 2
+            });
+        }
+    }
+
+    onResize(width, height) {
+        // Recalculate positions when canvas size changes
+        this.reset();
+    }
+
+    update(dt) {
+        if (this.isPaused) return;
+        
+        Matter.Engine.update(this.engine, dt * 1000);
+
+        // Calculate total momentum and energy
+        let totalMomentum = 0;
+        let totalEnergy = 0;
+
+        // Update energy data
+        for (let i = 0; i < this.numBalls; i++) {
+            const ball = this.balls[i];
+            const v = ball.velocity;
+            const speed = Math.sqrt(v.x * v.x + v.y * v.y);
+            const kinetic = 0.5 * this.ballMass * speed * speed;
+            const height = this.canvas.height - ball.position.y;
+            const potential = this.ballMass * this.gravity * height / 100; // scale height
+            const total = kinetic + potential;
+
+            this.energyData.kinetic[i] = kinetic;
+            this.energyData.potential[i] = potential;
+            this.energyData.total[i] = total;
+
+            // Calculate momentum
+            totalMomentum += this.ballMass * speed * Math.sign(v.x);
+            totalEnergy += total;
+
+            // Update values for individual balls
+            if (i + 2 < this.values.length) {
+                this.values[i + 2].value = speed;
+            }
+        }
+
+        // Update total values
+        this.values[0].value = Math.abs(totalMomentum);
+        this.values[1].value = totalEnergy;
+
+        this.draw();
+        this.updateEnergyChart();
+    }
+
+    draw() {
+        const ctx = this.ctx;
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Draw ceiling
+        ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--border-color');
+        ctx.fillRect(0, this.canvas.height / 3 - 10, this.canvas.width, 10);
+
+        // Draw strings
+        ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--text-color');
+        ctx.lineWidth = 2;
+        for (let i = 0; i < this.numBalls; i++) {
+            const c = this.constraints[i];
+            ctx.beginPath();
+            ctx.moveTo(c.pointA.x, c.pointA.y);
+            ctx.lineTo(this.balls[i].position.x, this.balls[i].position.y);
+            ctx.stroke();
+        }
+
+        // Draw balls
+        for (let ball of this.balls) {
+            ctx.beginPath();
+            ctx.arc(ball.position.x, ball.position.y, this.ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--primary-color');
+            ctx.fill();
+            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--text-color');
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    }
+
+    initEnergyChart() {
+        const graphCanvas = document.getElementById('energy-graph');
+        if (!graphCanvas || !(graphCanvas instanceof HTMLCanvasElement)) {
+            console.error('Energy graph canvas not found or not a canvas element');
+            return;
+        }
+        const ctx = graphCanvas.getContext('2d');
+        this.energyChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array(100).fill(''),
+                datasets: [
+                    {
+                        label: 'Kinetic Energy',
+                        data: Array(100).fill(0),
+                        borderColor: getComputedStyle(document.body).getPropertyValue('--primary-color'),
+                        tension: 0.4,
+                        fill: false
+                    },
+                    {
+                        label: 'Potential Energy',
+                        data: Array(100).fill(0),
+                        borderColor: getComputedStyle(document.body).getPropertyValue('--secondary-color'),
+                        tension: 0.4,
+                        fill: false
+                    },
+                    {
+                        label: 'Total Energy',
+                        data: Array(100).fill(0),
+                        borderColor: getComputedStyle(document.body).getPropertyValue('--accent-color'),
+                        tension: 0.4,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 0
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
         });
     }
 
     updateEnergyChart() {
         if (!this.energyChart) return;
-        
+
         // Shift data to the left
         this.energyChart.data.datasets[0].data.shift();
         this.energyChart.data.datasets[1].data.shift();
         this.energyChart.data.datasets[2].data.shift();
-        
-        // Add new data point
-        this.energyChart.data.datasets[0].data.push(this.values[0].value);
-        this.energyChart.data.datasets[1].data.push(this.values[1].value);
-        this.energyChart.data.datasets[2].data.push(this.values[2].value);
-        
-        // Update chart
+
+        // Add new data point (sum over all balls)
+        const kineticSum = this.energyData.kinetic.reduce((a,b) => a+b, 0);
+        const potentialSum = this.energyData.potential.reduce((a,b) => a+b, 0);
+        const totalSum = this.energyData.total.reduce((a,b) => a+b, 0);
+
+        this.energyChart.data.datasets[0].data.push(kineticSum);
+        this.energyChart.data.datasets[1].data.push(potentialSum);
+        this.energyChart.data.datasets[2].data.push(totalSum);
+
         this.energyChart.update();
     }
 
+    getEnergy() {
+        // Sum energies across all balls
+        const kineticSum = this.energyData.kinetic.reduce((a,b) => a+b, 0);
+        const potentialSum = this.energyData.potential.reduce((a,b) => a+b, 0);
+        const totalSum = this.energyData.total.reduce((a,b) => a+b, 0);
+        
+        return {
+            kinetic: kineticSum,
+            potential: potentialSum,
+            total: totalSum
+        };
+    }
 }
