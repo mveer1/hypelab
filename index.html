@@ -2,103 +2,197 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Physics Hyperion</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-    <link rel="icon" href="images/favicon.png" type="image/png">
+    <title>HYPERION - Physics Simulation Engine</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body data-theme="light">
-    <div class="container">
-        <header>
-            <div class="logo">
-                <h1>PhysicsHyperion</h1>
-                <div class="theme-toggle">
-                    <input type="checkbox" id="theme-switch" />
-                    <label for="theme-switch" class="switch-label">
-                        <span class="toggle"></span>
-                    </label>
-                </div>
+<body>
+    <div id="app">
+        <!-- Navigation Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="nav-header">
+                <h2 class="nav-title">HYPERION</h2>
+                <button id="nav-toggle" class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-            <ul class="category-tabs" id="category-tabs">
-              <li data-category="Core" class="active">Core Lab</li>
-              <li data-category="Quantum">Quantum area</li>
-              <li data-category="Gravity">Gravity field</li>
-              <li data-category="Chaos">Chaos theatre</li>
+            <ul class="nav-menu">
+                <li><a href="#/" class="nav-link active">Dashboard</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="#/core-mechanics" class="nav-link">Core Mechanics</a></li>
+                <li><a href="#/gravity-systems" class="nav-link">Gravity Systems</a></li>
+                <li><a href="#/chaos-theory" class="nav-link">Chaos Theory</a></li>
+                <li><a href="#/quantum-physics" class="nav-link">Quantum Physics</a></li>
             </ul>
-        </header>
-        <main>
-            <div class="simulation-menu">
-                <h2>Simulations</h2>
-                <ul id="simulation-list">
-                    <!-- Simulation items will be added dynamically -->
-                </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="main-content" class="main-content">
+            <!-- Breadcrumb Navigation -->
+            <div id="breadcrumb" class="breadcrumb hidden">
+                <span class="breadcrumb-item">
+                    <a href="#/" class="breadcrumb-link">Dashboard</a>
+                </span>
             </div>
-            <div class="simulation-container">
-                <div class="canvas-wrapper">
-                    <canvas id="simulation-canvas"></canvas>
-                    <div id="loading-indicator" class="hidden">
-                        <div class="planet-loader">
-                            <div class="sun"></div>
-                            <div class="planet-orbit inner-orbit">
-                                <div class="planet inner-planet"></div>
-                            </div>
-                            <div class="planet-orbit outer-orbit">
-                                <div class="planet outer-planet"></div>
-                            </div>
-                        </div>
-                        <p>Loading simulation...</p>
-                    </div>
-                </div>
-                <div class="controls-panel">
-                    <div class="controls-header">
-                        <h3>Controls</h3>
-                        <button id="reset-btn" class="control-btn">Reset</button>
-                    </div>
-                    <div id="parameters" class="parameters">
-                        <!-- Parameters will be added dynamically -->
-                    </div>
-                </div>
-                <div class="data-display">
-                    <div id="data-tabs">
-                        <button class="data-tab active" data-tab="graphs">Graphs</button>
-                        <button class="data-tab" data-tab="values">Values</button>
-                        <button class="data-tab" data-tab="formulas">Formulas</button>
-                    </div>
-                    <div id="graphs-container" class="tab-content active">
-                      <canvas id="energy-graph"></canvas>
-                    </div>
-                    <div id="values-container" class="tab-content">
-                        <!-- Values will be added dynamically -->
-                    </div>
-                    <div id="formulas-container" class="tab-content">
-                        <!-- Formulas will be added dynamically -->
-                    </div>
-                </div>
+
+            <!-- Dynamic Content Container -->
+            <div id="content-container" class="content-container">
+                <!-- Content will be dynamically loaded here -->
             </div>
         </main>
-        <footer>
-            <p>Physics Lab - Interactive Physics Simulations | <a href="#">About</a></p>
-        </footer>
+
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen hidden">
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <p class="loading-text">Initializing Simulation...</p>
+        </div>
+
+        <!-- Modal Overlay -->
+        <div id="modal-overlay" class="modal-overlay hidden">
+            <div class="modal-content">
+                <button id="modal-close" class="modal-close">&times;</button>
+                <div id="modal-body" class="modal-body">
+                    <!-- Modal content will be dynamically loaded -->
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Load libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
-    
-    <!-- Load simulation modules -->
-    <script src="src/core/newtonsCradle.js"></script>
-    <script src="src/core/harmonicOscillator.js"></script>
-    <script src="src/quantum/waveFunction.js"></script>
-    <script src="src/quantum/particleInBox.js"></script>
-    <script src="src/gravity/orbitalMotion.js"></script>
-    <script src="src/gravity/gravitationalLensing.js"></script>
-    <script src="src/chaos/doublePendulum.js"></script>
-    <script src="src/chaos/lorenzAttractor.js"></script>
+    <!-- Template: Dashboard -->
+    <template id="dashboard-template">
+        <div class="dashboard">
+            <div class="hero-section">
+                <h1 class="hero-title">
+                    <span class="hero-letter">H</span>
+                    <span class="hero-letter">Y</span>
+                    <span class="hero-letter">P</span>
+                    <span class="hero-letter">E</span>
+                    <span class="hero-letter">R</span>
+                    <span class="hero-letter">I</span>
+                    <span class="hero-letter">O</span>
+                    <span class="hero-letter">N</span>
+                </h1>
+                <p class="hero-subtitle">Advanced Physics Simulation Engine</p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">Simulations</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Categories</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Possibilities</span>
+                    </div>
+                </div>
+            </div>
 
-    
-    
-    <!-- Load main script -->
-    <script src="src/main.js"></script>
+            <div class="categories-grid" id="categories-grid">
+                <!-- Categories will be dynamically populated -->
+            </div>
+
+            <div class="complexity-chart">
+                <h2 class="chart-title">Simulation Complexity Analysis</h2>
+                <img src="https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/4e7167a76ed66e4a68c12c4753e1cb02/fcfb12f8-09f4-48df-bd39-301f547268a8/a68d89a4.png" alt="Physics Simulation Complexity Chart" class="complexity-chart-img">
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Category Page -->
+    <template id="category-template">
+        <div class="category-page">
+            <div class="category-header">
+                <h1 class="category-title"></h1>
+                <p class="category-description"></p>
+                <div class="category-meta">
+                    <span class="complexity-badge">Complexity: <span class="complexity-value"></span>/10</span>
+                    <span class="simulation-count"></span>
+                </div>
+            </div>
+            <div class="simulations-grid" id="simulations-grid">
+                <!-- Simulations will be dynamically populated -->
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Simulation Page -->
+    <template id="simulation-template">
+        <div class="simulation-page">
+            <div class="simulation-header">
+                <h1 class="simulation-title"></h1>
+                <p class="simulation-description"></p>
+            </div>
+            
+            <div class="simulation-layout">
+                <div class="simulation-main">
+                    <div class="simulation-canvas">
+                        <div class="canvas-placeholder">
+                            <div class="placeholder-icon">⚛️</div>
+                            <h3>Interactive Simulation</h3>
+                            <p>Real-time physics visualization would appear here</p>
+                            <div class="simulation-controls">
+                                <button class="btn btn-primary" id="play-pause-btn">▶ Start</button>
+                                <button class="btn btn-secondary" id="reset-btn">🔄 Reset</button>
+                                <button class="btn btn-secondary" id="export-btn">📤 Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="simulation-sidebar">
+                    <div class="panel parameters-panel">
+                        <h3 class="panel-title">Parameters</h3>
+                        <div class="parameters-list" id="parameters-list">
+                            <!-- Parameters will be dynamically populated -->
+                        </div>
+                    </div>
+
+                    <div class="panel theory-panel">
+                        <button class="panel-toggle" id="theory-toggle">
+                            <h3 class="panel-title">Theory & Equations</h3>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                        <div class="panel-content" id="theory-content">
+                            <div class="equations-list" id="equations-list">
+                                <!-- Equations will be dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel calculations-panel">
+                        <h3 class="panel-title">Live Calculations</h3>
+                        <div class="calculations-list" id="calculations-list">
+                            <div class="calculation-item">
+                                <span class="calc-label">Energy:</span>
+                                <span class="calc-value" id="energy-value">0.00 J</span>
+                            </div>
+                            <div class="calculation-item">
+                                <span class="calc-label">Momentum:</span>
+                                <span class="calc-value" id="momentum-value">0.00 kg⋅m/s</span>
+                            </div>
+                            <div class="calculation-item">
+                                <span class="calc-label">Time:</span>
+                                <span class="calc-value" id="time-value">0.00 s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="app.js"></script>
 </body>
 </html>
